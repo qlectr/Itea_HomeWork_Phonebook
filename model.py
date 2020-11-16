@@ -32,9 +32,13 @@ def is_name_exists_in_phonebook(contact_name):
     if contact_name in phonebook:
         return contact_name
 
-def update_config( **kwargs):
+def update_config(**kwargs):
     """Функция обновления формата файла справочника"""
     config.update_config()
+ 
+def view_config(**kwargs):
+    print(file_format)
+
 
 class Phonebook:
     def __init__(self):
@@ -67,7 +71,7 @@ class Phonebook:
             for key, value in contact_attribute.items():
                 new_attribute = {key: value}
                 old_attributes = phonebook.get(contact_name)
-                all_attributes = {**old_attributes, **new_attribute }
+                all_attributes = {**old_attributes, **new_attribute}
                 phonebook[contact_name] = all_attributes
                 print(MESSAGE_DONE)
         else:

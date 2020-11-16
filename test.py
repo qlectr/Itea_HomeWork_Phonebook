@@ -1,16 +1,10 @@
-import pickle
-import config
 import csv
+import pandas
 
-config.create_config()
-file_format = config.read_config().upper()
-file_name = config.read_config_file_name()
+phonebook = {}
 
-print(file_format)
-print(file_name)
 
-reader = csv.reader(open(file_name, 'r'))
-d = {}
-for row in reader:
-    k, v = row
-    d[k] = v
+
+with open('phonebook.csv', 'r') as data: 
+    for line in csv.DictReader(data): 
+        print(line) 

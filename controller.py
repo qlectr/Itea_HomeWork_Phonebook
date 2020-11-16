@@ -70,6 +70,18 @@ add_controller_method(  "V",
                         "",
                     )
 
+add_controller_method(  "CP",
+                        "Clear phonebook",
+                        model.Phonebook.clear_phonebook,
+                        "",
+                    )                   
+
+add_controller_method(  "VC",
+                        "View config",
+                        model.view_config,
+                        "Actual IO format:",
+                    ) 
+
 add_controller_method(  "UC",
                         "Update config",
                         model.update_config,
@@ -87,4 +99,3 @@ add_controller_method(  "Q",
                         quit_app,
                         "Good Buy!",
                     )
-            

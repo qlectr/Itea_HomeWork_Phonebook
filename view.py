@@ -15,12 +15,13 @@ while True:
         if input_action in ('A'):
             contact_name = controller.input_contact_name()
             contact_attribute = controller.input_contact_attribute()
-        if input_action in ('C','D'):
+        elif input_action in ('C','D'):
             contact_name = controller.input_contact_name()
+            contact_attribute = ''
         else:
             contact_name = ''
             contact_attribute = ''
-
+     
         print(controller.controller.get(input_action).get('help_message'))
         controller.controller.get(input_action).get('function_name')(contact_name = contact_name,
                                                                      contact_attribute = contact_attribute,)
