@@ -1,9 +1,13 @@
 import json
 
-def load_json(filename):
-    with open(filename, "r") as f:
-        return json.load(f)
+class json_dumper:
+    def __init__(self,filename):
+        self.filename = filename
 
-def save_json(phonebook, filename):
-    with open(filename, "w") as f:
-        json.dump(phonebook,f)        
+    def load(self):
+        with open(self.filename, "r") as f:
+            return json.load(f)
+
+    def save(self, phonebook):
+        with open(self.filename, "w") as f:
+            json.dump(phonebook,f)        

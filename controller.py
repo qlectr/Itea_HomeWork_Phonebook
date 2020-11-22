@@ -2,6 +2,11 @@ import model
 
 MESSAGE_MENU_ITEM_NOT_EXISTS = "The menu item does not exist. Try again!"
 
+phonebook = model.Phonebook(model.file_name)
+
+def view_phonebook_items(**kwargs):
+    print(phonebook.phonebook_items())
+
 controller = {}
 
 def show_menu():
@@ -32,9 +37,20 @@ def input_contact_attribute():
     return {key: value}
 
 
+def input_login_name(**kwargs):
+    """функция авторизации в справочнике"""
+    return input("Dima or Vasa: ") 
+
+
 def quit_app(**kwargs):
     """функция выхода из программы"""
     quit()
+
+
+def view_config_file_format(**kwargs):
+    print(model.file_format)
+
+
 
 
 def add_controller_method(key, description, function_name, help_message):
@@ -48,37 +64,37 @@ def add_controller_method(key, description, function_name, help_message):
 
 add_controller_method(  "C",
                         "Create contact",
-                        model.Phonebook.create_contact,
+                        phonebook.create_contact,
                         "Enter contact name",
                     )
 
 add_controller_method(  "A",
                         "Add or update contact attribute",
-                        model.Phonebook.add_or_update_contact_attributes,
+                        phonebook.add_or_update_contact_attributes,
                         "Enter contact attribute",
                     )
 
 add_controller_method(  "D",
                         "Delete contact",
-                        model.Phonebook.delete_contact,
+                        phonebook.delete_contact,
                         "Enter contact name",
                     )
 
 add_controller_method(  "V",
                         "View phonebook",
-                        model.Phonebook.view_phonebook,
+                        view_phonebook_items,
                         "",
                     )
 
 add_controller_method(  "CP",
                         "Clear phonebook",
-                        model.Phonebook.clear_phonebook,
+                        phonebook.clear_phonebook,
                         "",
                     )                   
 
 add_controller_method(  "VC",
                         "View config",
-                        model.view_config,
+                        view_config_file_format,
                         "Actual IO format:",
                     ) 
 
@@ -90,8 +106,14 @@ add_controller_method(  "UC",
 
 add_controller_method(  "S",
                         "Save phonebook",
-                        model.Phonebook.save_phonebook,
+                        phonebook.save_phonebook,
                         "",
+                    )
+
+add_controller_method(  "L",
+                        "Login",
+                        input_login_name,
+                        "Enter user name",
                     )
 
 add_controller_method(  "Q",

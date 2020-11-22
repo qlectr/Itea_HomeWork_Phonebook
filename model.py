@@ -1,33 +1,25 @@
 import config
 import os
-from IO_package import pickle_
-from IO_package import json_
-from IO_package import csv_
+from io_package import pickle_
+from io_package import json_
+from io_package import csv_
 
 MESSAGE_CONTACT_NOT_EXISTS = 'Contact does not exist!'
 MESSAGE_CONTACT_EXISTS = 'Contact already exists!'
-MESSAGE_DONE = 'Done!'
 
 config.create_config_if_not_exists()
 
 file_format, file_name  = config.read_config().upper() , config.read_config_file_name()
 
-#Блок определения формата файла, с которым мы будем работать в рамках данной сессии:
 if file_format  == 'JSON':
-    load, save = json_.load_json, json_.save_json
+    dumper = json_.json_dumper(file_name)
 elif file_format  == 'PICKLE':
-    load, save = pickle_.load_pickle, pickle_.save_pickle
+    dumper = pickle_.pickle_dumper(file_name)
 elif file_format  == 'CSV':
-    load, save = csv_.load_csv, csv_.save_csv
-
-#Загрузка ранее сохраненного справочника или создание нового:
-if os.path.exists(file_name):
-    phonebook = load(filename = file_name)
-else:
-    phonebook = {}
+    dumper = csv_.csv_dumper(file_name)
 
 
-def is_name_exists_in_phonebook(contact_name):
+def is_name_exists_in_phonebook(contact_name, phonebook):
     """Функция проверки наличия имени в справочнике"""
     if contact_name in phonebook:
         return contact_name
@@ -36,52 +28,49 @@ def update_config(**kwargs):
     """Функция обновления формата файла справочника"""
     config.update_config()
  
-def view_config(**kwargs):
-    print(file_format)
-
 
 class Phonebook:
-    def __init__(self):
-        pass
+    def __init__(self, file_name):
+        """Загрузка ранее сохраненного справочника или создание пустого"""
+        if os.path.exists(file_name):
+            self.phonebook = dumper.load()
+        else:
+            self.phonebook = {}
 
-    def clear_phonebook(**kwargs):        
+    def clear_phonebook(self,**kwargs):        
         """функция очистки справочника"""
-        phonebook.clear()
-        print(MESSAGE_DONE)
+        self.phonebook.clear()
 
-    def delete_contact(contact_name, **kwargs):
+
+    def delete_contact(self, contact_name, **kwargs):
         """функция удаления записи из справочника"""
-        if is_name_exists_in_phonebook(contact_name):
-            del phonebook[contact_name]
-            print(MESSAGE_DONE)
+        if is_name_exists_in_phonebook(contact_name, self.phonebook):
+            del self.phonebook[contact_name]
         else:
             raise KeyError(MESSAGE_CONTACT_NOT_EXISTS)
 
-    def create_contact(contact_name, **kwargs):
+    def create_contact(self, contact_name, **kwargs):
         """функция создания контакта в справочнике"""
-        if is_name_exists_in_phonebook(contact_name):
-            KeyError(MESSAGE_CONTACT_EXISTS)
+        if is_name_exists_in_phonebook(contact_name, self.phonebook):
+            raise KeyError(MESSAGE_CONTACT_EXISTS)
         else:
-            phonebook[contact_name] = {}
-            print(MESSAGE_DONE)
+            self.phonebook[contact_name] = {}
 
-    def add_or_update_contact_attributes(contact_name, contact_attribute, **kwargs):
+    def add_or_update_contact_attributes(self, contact_name, contact_attribute, **kwargs):
         """функция создания или обновления атрибутов контакта"""
-        if is_name_exists_in_phonebook(contact_name): 
+        if is_name_exists_in_phonebook(contact_name, self.phonebook): 
             for key, value in contact_attribute.items():
                 new_attribute = {key: value}
-                old_attributes = phonebook.get(contact_name)
+                old_attributes = self.phonebook.get(contact_name)
                 all_attributes = {**old_attributes, **new_attribute}
-                phonebook[contact_name] = all_attributes
-                print(MESSAGE_DONE)
+                self.phonebook[contact_name] = all_attributes
         else:
             raise KeyError(MESSAGE_CONTACT_NOT_EXISTS)
 
-    def view_phonebook(**kwargs):
+    def phonebook_items(self, **kwargs):
         """функция отображения всего содержимого справочника"""
-        print(phonebook.items())
+        return self.phonebook.items()
 
-    def save_phonebook(**kwargs):
+    def save_phonebook(self, **kwargs):
         """функция сохранения справочника"""
-        save(phonebook = phonebook,filename = file_name)
-        print(MESSAGE_DONE)
+        dumper.save(phonebook=self.phonebook)

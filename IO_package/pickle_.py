@@ -1,9 +1,13 @@
 import pickle
 
-def load_pickle(filename):
-    with open(filename, "rb") as f:
-        return pickle.load(f)
+class pickle_dumper:
+    def __init__(self,filename):
+        self.filename = filename
+        
+    def load(self):
+        with open(self.filename, "rb") as f:
+            return pickle.load(f)
 
-def save_pickle(phonebook, filename):
-    with open(filename, "wb") as f:
-        pickle.dump(phonebook,f)   
+    def save(self, phonebook):
+        with open(self.filename, "wb") as f:
+            pickle.dump(phonebook,f)   
