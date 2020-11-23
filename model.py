@@ -33,14 +33,25 @@ class Phonebook:
     def __init__(self, file_name):
         """Загрузка ранее сохраненного справочника или создание пустого"""
         if os.path.exists(file_name):
-            self.phonebook = dumper.load()
+            self.phonebook = dumper.load().copy()
         else:
             self.phonebook = {}
+
+    def __repr__(self):
+        return repr(self.phonebook)
+
+    def __setitem__(self, index, value):
+        self.phonebook[index] = value
+
+    def __getitem__(self, index):
+        return self.phonebook[index]
+
+    def __delitem__(self, index):
+        del self.phonebook[index]
 
     def clear_phonebook(self,**kwargs):        
         """функция очистки справочника"""
         self.phonebook.clear()
-
 
     def delete_contact(self, contact_name, **kwargs):
         """функция удаления записи из справочника"""
