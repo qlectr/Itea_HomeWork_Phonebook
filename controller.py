@@ -5,7 +5,7 @@ MESSAGE_MENU_ITEM_NOT_EXISTS = "The menu item does not exist. Try again!"
 phonebook = model.Phonebook(model.file_name)
 
 def view_phonebook_items(**kwargs):
-    print(phonebook.phonebook_items())
+    print(phonebook)
 
 controller = {}
 
